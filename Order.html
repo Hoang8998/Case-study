@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Đồ Ăn</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; background-image: url('./case study/istockphoto-1255820845-1024x1024.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .menu-item img {
+            width: 100px;
+            margin-right: 10px;
+        }
+
+        #cart {
+            margin-top: 20px;
+        }
+
+        #cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        #total-price {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Menu Đồ Ăn</h1>
+    <div id="menu">
+        <!-- Các mục menu -->
+        <div class="menu-item">
+            <img src="./case study/ex_cheese_whp_jr.jpg" alt="Hamburger">
+            <p>Hamburger - $5</p>
+            <button onclick="addToCart('Hamburger', 5)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="./case study/Veggie-mania-Pizza-Rau-Cu-Thap-Cam.jpg" alt="Pizza">
+            <p>Pizza - $8</p>
+            <button onclick="addToCart('Pizza', 8)">Add to Cart</button>
+        </div>
+        <div class="menu-item">
+            <img src="./case study/goc_canh_bao_an_nhieu_sushi_de_bi_nhiem_khuan_0a0e6807_GDEF.jpg" alt="Sushi">
+            <p>Sushi - $10</p>
+            <button onclick="addToCart('Sushi', 10)">Add to Cart</button>
+        </div>
+    </div>
+
+    <h2>Giỏ Hàng</h2>
+    <div id="cart">
+        <div id="cart-items"></div>
+        <p id="total-price">Tổng Tiền: $0</p>
+        <button onclick="checkout()">Checkout</button>
+    </div>
+
+    <script>
+        // Các hàm JavaScript
+        var cartItems = [];
+        var totalPrice = 0;
+
+        function addToCart(itemName, price) {
+            cartItems.push({ name: itemName, price: price });
+            totalPrice += price;
+
+            updateCart();
+        }
+
+        function updateCart() {
+            var cartItemsElement = document.getElementById('cart-items');
+            var totalElement = document.getElementById('total-price');
+
+            cartItemsElement.innerHTML = '';
+
+            cartItems.forEach(function (item) {
+                var cartItemElement = document.createElement('div');
+                cartItemElement.id = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <p>${item.name} - $${item.price}</p>
+                    <button onclick="removeFromCart('${item.name}', ${item.price})">Remove</button>
+                `;
+
+                cartItemsElement.appendChild(cartItemElement);
+            });
+
+            totalElement.innerText = 'Tổng Tiền: $' + totalPrice;
+        }
+
+        function removeFromCart(itemName, price) {
+            var itemIndex = cartItems.findIndex(function (item) {
+                return item.name === itemName && item.price === price;
+            });
+
+            if (itemIndex !== -1) {
+                cartItems.splice(itemIndex, 1);
+                totalPrice -= price;
+
+                updateCart();
+            }
+        }
+
+        function checkout() {
+            if (cartItems.length === 0) {
+                alert('Giỏ hàng rỗng');
+            } else {
+                alert('Đặt hàng thành công! Tổng tiền: $' + totalPrice);
+                cartItems = [];
+                totalPrice = 0;
+                updateCart();
+            }
+        }
+    </script>
+</body>
+</html>
